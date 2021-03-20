@@ -157,6 +157,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_MOVE:
 				choice = MOVE;
 				break;
+			case ID_CIR:
+				choice = CIR;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -183,6 +185,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 				case RECT:
 					Rectangle(hdc, x1, y1, x2, y2);
+					break;
+				case CIR:
+					Ellipse(hdc, 2 * x1 - x2, 2 * y1 - y2, x2, y2);
 					break;
 				default:break;
 				}

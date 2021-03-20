@@ -26,6 +26,11 @@ void MouseCallback(HWND& hWnd, UINT message, WPARAM wParam, LPARAM lParam,int ch
 			x1 = LOWORD(lParam);
 			y1 = HIWORD(lParam);
 			break;
+		case CIR:
+			flag = 0;
+			x1 = LOWORD(lParam);
+			y1 = HIWORD(lParam);
+			break;
 		default:
 			break;
 		}
@@ -56,6 +61,16 @@ void MouseCallback(HWND& hWnd, UINT message, WPARAM wParam, LPARAM lParam,int ch
 				MainStack.push(RECT, x1, y1, x2, y2, 0, 0);
 				hdc = GetDC(hWnd);
 				Rectangle(hdc, x1, y1, x2, y2);
+				ReleaseDC(hWnd, hdc);
+			}
+			break;
+		case CIR:
+			x2 = LOWORD(lParam);
+			y2 = HIWORD(lParam);
+			if (x1 != x2 || y1 != y2) {
+				MainStack.push(CIR, x1, y1, x2, y2, 0, 0);
+				hdc = GetDC(hWnd);
+				Ellipse(hdc, 2 * x1 - x2, 2 * y1 - y2, x2, y2);
 				ReleaseDC(hWnd, hdc);
 			}
 			break;

@@ -13,6 +13,13 @@ bool IsInRectRange(int x0, int y0, int x1, int y1, int x2, int y2) {
 	}
 	return NO;
 }
+
+bool IsInCirRange(int x0, int y0, int x1, int y1, int x2, int y2) {
+	if ((pow(x0 - x1, 2) + pow(y0 - y1, 2)) < (pow(x2 - x1, 2) + pow(y2 - y1, 2))) {
+		return YES;
+	}
+	return NO;
+}
 /*
 
 */
