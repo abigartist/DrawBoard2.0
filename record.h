@@ -38,6 +38,7 @@ public:
 	int GetStackTop();
 	DesAndShape OutPoint(int index);
 	void AddDx(int dx, int dy);
+	//void change(int index,int shape, int x1, int y1, int x2, int y2);
 	~RecordStack() {};
 private:
 	DesAndShape array[MAX_SHAPE];

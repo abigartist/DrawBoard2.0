@@ -5,20 +5,25 @@
 #include "DrawBoard.h"
 #include "mousemsg.h"
 #include "record.h"
-void DrawLine(HWND hWnd);
+#include <fstream>
+//void DrawLine(HWND hWnd);
 #define MAX_LOADSTRING 100
+#define MAX_PATHLENGTH 50
 
 // 全局变量:
 RecordStack MainStack;
 HINSTANCE hInst;                                // 当前实例
 WCHAR szTitle[MAX_LOADSTRING];                  // 标题栏文本
 WCHAR szWindowClass[MAX_LOADSTRING];            // 主窗口类名
+WCHAR wrFilePath[MAX_PATHLENGTH];                // 所允许的最长文件路径
+int slFlag = 0;
 
 // 此代码模块中包含的函数的前向声明:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    Load(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -148,6 +153,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
+			case IDM_LOAD:
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_LOAD), hWnd, Load);
+				InvalidateRect(hWnd, nullptr, TRUE);
+				break;
+			case IDM_SAVE:
+				if (slFlag == 1) {
+					std::ofstream OutFile(wrFilePath);
+					rep(MainStack.GetStackTop()) {
+						OutFile << MainStack.OutPoint(index).shape<<" ";
+						OutFile << MainStack.OutPoint(index).x1 << " ";
+						OutFile << MainStack.OutPoint(index).y1 << " ";
+						OutFile << MainStack.OutPoint(index).x2 << " ";
+						OutFile << MainStack.OutPoint(index).y2 << " ";
+					}
+				}
+				break;
 			case ID_LINE:
 				choice = LINE;
 				break;
@@ -231,7 +252,45 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return (INT_PTR)FALSE;
 }
 
+INT_PTR CALLBACK Load(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+	UNREFERENCED_PARAMETER(lParam);
+	HWND hStaticText;
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		hStaticText = GetDlgItem(hDlg, IDC_STATIC);
+		SetWindowText(hStaticText, TEXT("在下方对话框输入文件路径以读取文件"));
+		return (INT_PTR)TRUE;
 
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			if (LOWORD(wParam) == IDOK) {
+				std::string str;
+				std::string str1;
+				std::string str2;
+				std::string str3;
+				std::string str4;
+				GetDlgItemText(hDlg, IDC_EDIT1, wrFilePath, MAX_PATHLENGTH);
+				std::ifstream readFile(wrFilePath);
+				rep(MainStack.GetStackTop()+1) {
+					readFile >> str;
+					readFile >> str1;
+					readFile >> str2;
+					readFile >> str3;
+					readFile >> str4;
+					MainStack.push(atoi(str.c_str()), atoi(str1.c_str()), atoi(str2.c_str()), atoi(str3.c_str()), atoi(str4.c_str()),0,0);
+				}
+				slFlag = 1;
+				//InvalidateRect(hDlg, nullptr, TRUE);
+			}
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
 //void DrawLine(HWND hWnd) {
 
 	//HDC hdc = GetDC(hWnd);

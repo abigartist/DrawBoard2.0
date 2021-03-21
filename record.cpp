@@ -62,6 +62,16 @@ void RecordStack::AddDx(int dx, int dy)
 	array[StackTop-1].y2 += dy;
 }
 
+/*void RecordStack::change(int index, int shape,int x1, int y1, int x2, int y2)
+{
+	array[index].shape = shape;
+	array[index].x1 = x1;
+	array[index].y1 = y1;
+	array[index].x2 = x2;
+	array[index].y2 = y2;
+	StackTop++;
+}
+*/
 void RecordStack::swap(int index1, int index2)
 {
 	if (index1 == index2) {

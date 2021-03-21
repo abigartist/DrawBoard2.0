@@ -1,5 +1,8 @@
 ﻿  DrawBoard.cpp
-C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(130,6): warning C4101:  “hdc”: 未引用的局部变量
-C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(131,9): warning C4101:  “iTarget”: 未引用的局部变量
-C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(129,8): warning C4101:  “szBuffer”: 未引用的局部变量
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(135,6): warning C4101:  “hdc”: 未引用的局部变量
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(136,9): warning C4101:  “iTarget”: 未引用的局部变量
+  mousemsg.cpp
+  record.cpp
+  正在生成代码...
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(134,8): warning C4101:  “szBuffer”: 未引用的局部变量
   DrawBoard.vcxproj -> C:\Users\20694\source\repos\DrawBoard\Debug\DrawBoard.exe
