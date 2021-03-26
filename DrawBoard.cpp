@@ -160,6 +160,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case IDM_SAVE:
 				if (slFlag == 1) {
 					std::ofstream OutFile(wrFilePath);
+					OutFile << MainStack.GetStackTop()<<" ";
 					rep(MainStack.GetStackTop()) {
 						OutFile << MainStack.OutPoint(index).shape<<" ";
 						OutFile << MainStack.OutPoint(index).x1 << " ";
@@ -273,7 +274,9 @@ INT_PTR CALLBACK Load(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 				std::string str4;
 				GetDlgItemText(hDlg, IDC_EDIT1, wrFilePath, MAX_PATHLENGTH);
 				std::ifstream readFile(wrFilePath);
-				rep(MainStack.GetStackTop()+1) {
+				readFile >> str;
+				int stacktop = atoi(str.c_str());
+				rep(stacktop) {
 					readFile >> str;
 					readFile >> str1;
 					readFile >> str2;
