@@ -1,5 +1,15 @@
-﻿  DrawBoard.cpp
-C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(135,6): warning C4101:  “hdc”: 未引用的局部变量
-C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(136,9): warning C4101:  “iTarget”: 未引用的局部变量
-C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(134,8): warning C4101:  “szBuffer”: 未引用的局部变量
+﻿  cir_factor.cpp
+  DrawBoard.cpp
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(138,6): warning C4101:  “hdc”: 未引用的局部变量
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(139,9): warning C4101:  “iTarget”: 未引用的局部变量
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(137,8): warning C4101:  “szBuffer”: 未引用的局部变量
+  line_factor.cpp
+  record_factor.cpp
+C:\Users\20694\source\repos\DrawBoard\DrawBoard.cpp(322,31): warning C4018:  “<”: 有符号/无符号不匹配
+C:\Users\20694\source\repos\DrawBoard\record_factor.cpp(19,47): warning C4018:  “<”: 有符号/无符号不匹配
+C:\Users\20694\source\repos\DrawBoard\record_factor.cpp(29,47): warning C4018:  “<”: 有符号/无符号不匹配
+C:\Users\20694\source\repos\DrawBoard\record_factor.cpp(39,28): warning C4018:  “<”: 有符号/无符号不匹配
+  rect_factor.cpp
+  正在生成代码...
+C:\Users\20694\source\repos\DrawBoard\record_factor.cpp(48,24): warning C4018:  “<”: 有符号/无符号不匹配
   DrawBoard.vcxproj -> C:\Users\20694\source\repos\DrawBoard\Debug\DrawBoard.exe

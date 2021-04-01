@@ -1,17 +1,19 @@
 ﻿// DrawBoard.cpp : 定义应用程序的入口点。
 //
-
+//后续为“//”的为后续清除项
 #include "framework.h"
-#include "DrawBoard.h"
-#include "mousemsg.h"
-#include "record.h"
+//#include "DrawBoard.h"
+#include "record_factor.h"
 #include <fstream>
+
 //void DrawLine(HWND hWnd);
 #define MAX_LOADSTRING 100
 #define MAX_PATHLENGTH 50
+#define DATAEND -2
 
 // 全局变量:
-RecordStack MainStack;
+MouseEventFactor MouseEvent;
+RecordFactor MainRecord;
 HINSTANCE hInst;                                // 当前实例
 WCHAR szTitle[MAX_LOADSTRING];                  // 标题栏文本
 WCHAR szWindowClass[MAX_LOADSTRING];            // 主窗口类名
@@ -24,6 +26,7 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Load(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    Save(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -134,10 +137,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	TCHAR szBuffer[128];
 	HDC hdc;
 	size_t iTarget;
+	static Choice option=Choice::NULLEVENT;
 	static int choice = 0;
-	int x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
+	static message_for_shapes temp;
 	if (message == WM_MOUSEMOVE || message == WM_LBUTTONDOWN || message == WM_LBUTTONUP) {
-		MouseCallback(hWnd, message, wParam, lParam,choice);
+		//MouseCallback(hWnd, message, wParam, lParam,choice);//
+		MainRecord.GetWnd(hWnd);
+		temp = MouseEvent.GetEvent(message, wParam, lParam, option);
+		if (MouseEvent.IsLoader()) {
+			MainRecord.RespondEvent(temp);
+		}
+		
 	}
     switch (message)
     {
@@ -158,29 +168,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				InvalidateRect(hWnd, nullptr, TRUE);
 				break;
 			case IDM_SAVE:
-				if (slFlag == 1) {
-					std::ofstream OutFile(wrFilePath);
-					OutFile << MainStack.GetStackTop()<<" ";
-					rep(MainStack.GetStackTop()) {
-						OutFile << MainStack.OutPoint(index).shape<<" ";
-						OutFile << MainStack.OutPoint(index).x1 << " ";
-						OutFile << MainStack.OutPoint(index).y1 << " ";
-						OutFile << MainStack.OutPoint(index).x2 << " ";
-						OutFile << MainStack.OutPoint(index).y2 << " ";
-					}
-				}
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_SAVE), hWnd, Save);
 				break;
 			case ID_LINE:
-				choice = LINE;
-				break;
-			case ID_RECT:
-				choice = RECT;
+				option = Choice::LINEEVENT;
 				break;
 			case ID_MOVE:
-				choice = MOVE;
+				option = Choice::MOVEEVENT;
+				break;
+			case ID_RECT:
+				option = Choice::RECTEVENT;
 				break;
 			case ID_CIR:
-				choice = CIR;
+				option = Choice::CIREVENT;
+				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -189,31 +190,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
-		    //DrawLine(hWnd);
-
             HDC hdc = BeginPaint(hWnd, &ps);
-			//以下3行调试使用
-			/*if (MainStack.GetStackTop() == 1)
-			{
-				MoveToEx(hdc, 0, 0, nullptr);
-				LineTo(hdc, 500, 500);
-			}*/
-			rep(MainStack.GetStackTop()) {
-				x1 = MainStack.OutPoint(index).x1; y1 = MainStack.OutPoint(index).y1; x2 = MainStack.OutPoint(index).x2; y2 = MainStack.OutPoint(index).y2; x3 = MainStack.OutPoint(index).x3; y3 = MainStack.OutPoint(index).y3;
-				switch (MainStack.OutPoint(index).shape) {
-				case LINE:
-					MoveToEx(hdc, x1, y1, nullptr);
-					LineTo(hdc, x2, y2);
-					break;
-				case RECT:
-					Rectangle(hdc, x1, y1, x2, y2);
-					break;
-				case CIR:
-					Ellipse(hdc, 2 * x1 - x2, 2 * y1 - y2, x2, y2);
-					break;
-				default:break;
-				}
-			}
+			MainRecord.GetWndDC(hdc);
+			MainRecord.PaintEvent();
             // TODO: 在此处添加使用 hdc 的任何绘图代码...
             EndPaint(hWnd, &ps);
         }
@@ -256,6 +235,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 INT_PTR CALLBACK Load(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 	UNREFERENCED_PARAMETER(lParam);
 	HWND hStaticText;
+	message_for_shapes msg_from_file;
 	switch (message)
 	{
 	case WM_INITDIALOG:
@@ -267,24 +247,40 @@ INT_PTR CALLBACK Load(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
 			if (LOWORD(wParam) == IDOK) {
-				std::string str;
-				std::string str1;
-				std::string str2;
-				std::string str3;
-				std::string str4;
+				FILE* fin;
 				GetDlgItemText(hDlg, IDC_EDIT1, wrFilePath, MAX_PATHLENGTH);
-				std::ifstream readFile(wrFilePath);
-				readFile >> str;
-				int stacktop = atoi(str.c_str());
-				rep(stacktop) {
-					readFile >> str;
-					readFile >> str1;
-					readFile >> str2;
-					readFile >> str3;
-					readFile >> str4;
-					MainStack.push(atoi(str.c_str()), atoi(str1.c_str()), atoi(str2.c_str()), atoi(str3.c_str()), atoi(str4.c_str()),0,0);
+				_bstr_t b(wrFilePath);//wchar使用此宏转换
+				char* file_path;
+				file_path = b;
+				fopen_s(&fin, file_path, "r+");
+				while (TRUE) {
+					Choice choice_from_msg = NULLEVENT;
+					int end_check;
+					fscanf_s(fin, "%d", &end_check);
+					if (end_check == DATAEND) {
+						break;
+					}
+					else {
+						choice_from_msg = (Choice)end_check;
+						if (choice_from_msg == NULLEVENT) {
+							break;
+						}
+						else {
+							msg_from_file.option = choice_from_msg;
+							msg_from_file.event_msg = SETPOINTON;
+							int data_temp = 0;
+							while (TRUE) {
+								fscanf_s(fin, "%d", &data_temp);
+								if (data_temp == EVENTEND) {
+									break;
+								}
+								msg_from_file.pos.push(data_temp);
+							}
+							MainRecord.RespondEvent(msg_from_file);
+						}
+					}
 				}
-				slFlag = 1;
+				fclose(fin);
 				//InvalidateRect(hDlg, nullptr, TRUE);
 			}
 			EndDialog(hDlg, LOWORD(wParam));
@@ -301,3 +297,45 @@ INT_PTR CALLBACK Load(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
 	//LineTo(hdc, 20, 20);
 	//ReleaseDC(hWnd,hdc);
 //}
+INT_PTR CALLBACK Save(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
+	UNREFERENCED_PARAMETER(lParam);
+	HWND hStaticText;
+	queue<int> tempQ;
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		hStaticText = GetDlgItem(hDlg, IDC_STATIC);
+		SetWindowText(hStaticText, TEXT("在下方对话框输入文件路径以读取文件"));
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			if (LOWORD(wParam) == IDOK) {
+				GetDlgItemText(hDlg, IDC_EDIT1, wrFilePath, MAX_PATHLENGTH);
+				//InvalidateRect(hDlg, nullptr, TRUE);
+				FILE* fout;
+				_bstr_t b(wrFilePath);//wchar使用此宏转换
+				char* file_path;
+				file_path = b;
+				fopen_s(&fout, file_path, "wt+");
+				for (int index = 0; index < MainRecord.vec.size(); index++) {
+					tempQ = MainRecord.vec[index]->OutObjPos();
+					while (!tempQ.empty()) {
+						fprintf_s(fout, "%d ", tempQ.front());
+						//fscanf_s(fout, "%d", &tempQ.front());
+						tempQ.pop();
+					}
+				}
+				int data_end = DATAEND;
+				fprintf_s(fout, "%d",data_end);
+				fclose(fout);
+			}
+			
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}

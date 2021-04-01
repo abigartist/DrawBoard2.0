@@ -27,13 +27,25 @@
     <ClInclude Include="DrawBoard.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="mousemsg.h">
+    <ClInclude Include="shape_factor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="calculate.h">
+    <ClInclude Include="record_factor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="record.h">
+    <ClInclude Include="mouse_event.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rect_factor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="line_factor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cir_factor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pol_factor.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,13 +53,25 @@
     <ClCompile Include="DrawBoard.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="mousemsg.cpp">
+    <ClCompile Include="shape_factor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="calculate.cpp">
+    <ClCompile Include="record_factor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="record.cpp">
+    <ClCompile Include="mouse_event.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rect_factor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="line_factor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cir_factor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pol_factor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

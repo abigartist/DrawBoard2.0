@@ -23,7 +23,7 @@
     <ProjectGuid>{66704F47-E58A-4CD2-9DFF-F5389295E941}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DrawBoard</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -151,19 +151,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="calculate.h" />
+    <ClInclude Include="cir_factor.h" />
     <ClInclude Include="DrawBoard.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="mousemsg.h" />
-    <ClInclude Include="record.h" />
+    <ClInclude Include="line_factor.h" />
+    <ClInclude Include="mouse_event.h" />
+    <ClInclude Include="pol_factor.h" />
+    <ClInclude Include="record_factor.h" />
+    <ClInclude Include="rect_factor.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="shape_factor.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="calculate.cpp" />
+    <ClCompile Include="cir_factor.cpp" />
     <ClCompile Include="DrawBoard.cpp" />
-    <ClCompile Include="mousemsg.cpp" />
-    <ClCompile Include="record.cpp" />
+    <ClCompile Include="line_factor.cpp" />
+    <ClCompile Include="mouse_event.cpp" />
+    <ClCompile Include="pol_factor.cpp" />
+    <ClCompile Include="record_factor.cpp" />
+    <ClCompile Include="rect_factor.cpp" />
+    <ClCompile Include="shape_factor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DrawBoard.rc" />

@@ -13,8 +13,9 @@
 #define IDC_DRAWBOARD                   109
 #define IDR_MAINFRAME                   128
 #define IDD_LOAD                        130
+#define IDD_SAVE                        131
 #define IDC_EDIT1                       1001
-#define IDC_BUTTON2                     1002
+#define IDC_LIST1                       1003
 #define ID_LINE                         32772
 #define ID_32773                        32773
 #define ID_MOVE                         32774
@@ -34,9 +35,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        131
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32784
-#define _APS_NEXT_CONTROL_VALUE         1003
+#define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif
