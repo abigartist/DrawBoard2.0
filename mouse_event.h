@@ -39,7 +39,7 @@ private:
 	int x1, y1, x2, y2, loader = 0;// holding = 0;//loader用于判断当前是否有消息传递必要；holding检测是否还在连续点击中
 	void MouseEventSelector();
 	void LeftButtonClick();
-	void LeftDoubleClick();
+	void LeftCtrlClick();
 	void LeftButtonDown();
 	void LeftButtonUp();
 	void MouseMoving();

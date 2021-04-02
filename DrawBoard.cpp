@@ -182,6 +182,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_CIR:
 				option = Choice::CIREVENT;
 				break;
+			case ID_POL:
+				option = Choice::POLEVENT;
+				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }

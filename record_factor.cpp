@@ -9,7 +9,12 @@ void RecordFactor::RespondEvent(message_for_shapes msg)
 			buffer.push_back(msg.pos.front());//将pos中全部进入缓存
 			msg.pos.pop();
 		}
-		NewObject();
+		if (!vec.empty() && vec[vec.size() - 1]->IsHaveObj()) {
+			vec[vec.size() - 1]->HandleMsg(RecordFactor::msg);
+		}
+		else {
+			NewObject();
+		}
 		while (!buffer.empty()) {
 			buffer.pop_back();
 		}
@@ -17,7 +22,8 @@ void RecordFactor::RespondEvent(message_for_shapes msg)
 	else if(msg.event_msg == SETPOINTSUSPEND)
 	{
 		for (int index = RecordFactor::index; index < vec.size(); index++) {
-			if (vec[index]->HandleMsg(msg)) {
+			bool determine = vec[index]->HandleMsg(msg);
+			if (determine) {
 				RiseTheObjToTop(index);
 				if (msg.is_pressed||!vec[index]->OverHandle()) RecordFactor::index = index;
 				break;
@@ -75,6 +81,7 @@ void RecordFactor::NewObject()
 	ShapeFactor* ptr = nullptr;
 	ptr = shape_loader[msg.option]->NewObj();
 	ptr->SetDes(buffer);
+	ptr->HandleMsg(msg);
 	vec.push_back(ptr);
 	//ShapeFactor* ptr = shape_loader.line_factor.NewObj();
 	//ptr->SetDes(buffer);

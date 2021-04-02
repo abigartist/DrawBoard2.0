@@ -7,22 +7,18 @@ void MouseEventFactor::LeftButtonClick()
 	y2 = y1 = HIWORD(lParam);
 	msg_temp.push(x1);
 	msg_temp.push(y1);
-	msg_temp.push(x2);
-	msg_temp.push(y2);
 	msg_to_shape = { SETPOINTSUSPEND,msg_temp ,choice, FALSE };
 	loader = 1;
 }
 
-void MouseEventFactor::LeftDoubleClick()
+void MouseEventFactor::LeftCtrlClick()
 {
 	queue<int> msg_temp;
 	x2 = x1 = LOWORD(lParam);
 	y2 = y1 = HIWORD(lParam);
 	msg_temp.push(x1);
 	msg_temp.push(y1);
-	msg_temp.push(x2);
-	msg_temp.push(y2);
-	msg_to_shape = { SETPOINTOFF,msg_temp ,choice, FALSE };
+	msg_to_shape = { SETPOINTON,msg_temp ,choice, FALSE };
 	loader = 1;
 }
 
@@ -69,7 +65,7 @@ void MouseEventFactor::LeftButtonUp()
 	default:
 		x2 = LOWORD(lParam);
 		y2 = HIWORD(lParam);
-		if (PointDis(x1, y1, x2, y2) < 2) {
+		if (PointDis(x1, y1, x2, y2) < 10) {
 			LeftButtonClick();
 			break;
 		}
@@ -126,12 +122,12 @@ void MouseEventFactor::MouseEventSelector()
 	{
 	case WM_LBUTTONDOWN:
 		LeftButtonDown();
+		if (wParam & MK_CONTROL) {
+			LeftCtrlClick();
+		}
 		break;
 	case WM_LBUTTONUP:
 		LeftButtonUp();
-		break;
-	case WM_LBUTTONDBLCLK:
-		LeftDoubleClick();
 		break;
 	case WM_MOUSEMOVE: 
 		MouseMoving();

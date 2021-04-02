@@ -42,6 +42,9 @@ bool CirFactor::HandleMsg(message_for_shapes msg)
 		msg.pos.pop();
 		y1_msg = msg.pos.front();
 		msg.pos.pop();
+		if (msg.pos.empty()) {
+			break;
+		}
 		x2_msg = msg.pos.front();
 		msg.pos.pop();
 		y2_msg = msg.pos.front();
@@ -66,15 +69,22 @@ bool CirFactor::HandleMsg(message_for_shapes msg)
 			ischoosed = FALSE;
 			return FALSE;
 		case SETPOINTON:
-			Move(x1_msg - cx, y1_msg - cy);
-			cx = x1_msg;
-			cy = y1_msg;
+			if (msg.option == MOVEEVENT) {
+				Move(x1_msg - cx, y1_msg - cy);
+				cx = x1_msg;
+				cy = y1_msg;
+			}
 			return TRUE;
 		default:
 			break;
 		}
 	}
 	isover_handled = 1;
+}
+
+bool CirFactor::IsHaveObj()
+{
+	return FALSE;
 }
 
 bool CirFactor::OverHandle()

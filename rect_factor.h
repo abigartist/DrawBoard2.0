@@ -19,6 +19,7 @@ public:
 	bool IsChoosed(int x0, int y0) override; //判断图片是否被选中
 	bool HandleMsg(message_for_shapes msg) override;
 	bool OverHandle() override;
+	bool IsHaveObj() override;
 	queue<int> OutObjPos() override;
 private:
 	int x1, y1, x2, y2;

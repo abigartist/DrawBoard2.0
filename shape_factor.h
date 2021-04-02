@@ -21,6 +21,7 @@ public:
 	virtual void Move(int dx, int dy) = 0; //移动图片
 	virtual bool OverHandle() = 0;
 	virtual bool IsChoosed(int x0, int y0) = 0; //判断图片是否被选中
+	virtual bool IsHaveObj() = 0;//判断目前是否有已申请的对象
 	virtual bool HandleMsg(message_for_shapes msg) = 0; //任何使用该接口的类必须实现消息处理机制
 };
 
